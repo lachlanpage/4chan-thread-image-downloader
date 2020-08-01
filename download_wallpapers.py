@@ -1,5 +1,5 @@
 # /wg wallpaper downloader 
-import urllib
+import urllib.request
 import os
 import sys 
 import time  
@@ -34,15 +34,15 @@ thread = sys.argv[1]
 content = urllib.request.Request(thread, headers=hdr)
 content = urllib.request.urlopen(content) 
 #parse to BeautifulSoup object for easy searching
-soup = BeautifulSoup(content, "html5lib")
+soup = BeautifulSoup(content, "html.parser")
 images = soup.findAll("a", {"class" : "fileThumb"})
 
 count = 0 
 for image in images: 
     count += 1
     #filter out url junk to get relative filename
-    absolute_filename = "http:" + image['href']
-    relative_image = absolute_filename[21:]
+    absolute_filename = "https:" + image['href']
+    relative_image = str(absolute_filename).split("/")[-1]
     sys.stdout.write("Trying: " + str(absolute_filename) + "\n")
 
     if(os.path.isfile(relative_image)):
